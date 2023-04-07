@@ -1,6 +1,7 @@
 package ManyToMany;
 import Hotel.Hotel;
 import Persoana.Persoana;
+import Persoana.Client;
 import Serviciu.Serviciu;
 import Camera.Camera;
 
@@ -14,7 +15,7 @@ public class Rezervare extends ManyToMany{
     private ArrayList<Serviciu> ServiciiCumparate;
     private Camera Camera;
 
-    void achizitioneazaServiciu(Serviciu s){
+    public void achizitioneazaServiciu(Serviciu s){
         if(Hotel.getServicii().contains(s)){
             ServiciiCumparate.add(s);
             System.out.println("Serviciul a fost achizitionat");
@@ -23,7 +24,7 @@ public class Rezervare extends ManyToMany{
         System.out.println("Hotelul nu ofera acest serviciu");
     }
 
-    void checkIn(){
+    public void checkIn(){
         if(!CheckedIn){
             CheckedIn = true;
             System.out.println("CheckIn efectuat");
@@ -32,7 +33,7 @@ public class Rezervare extends ManyToMany{
         System.out.println("CheckIn deja efectuat");
     }
 
-    void checkOut(){
+    public void checkOut(){
         if(CheckedIn){
             CheckedIn = false;
             System.out.println("CheckOut efectuat");
@@ -58,7 +59,6 @@ public class Rezervare extends ManyToMany{
     }
 
     public void modificareCheckOutDate(LocalDate checkOutDate) {
-        //verifica daca data de check out e inainte de check in
         if(CheckedIn){
             System.out.println("CheckIn deja efectuat");
             return;
@@ -74,9 +74,38 @@ public class Rezervare extends ManyToMany{
         }
         System.out.println("Camera nu este disponibila in aceasta perioada");
     }
-    public Rezervare(Persoana persoana, Hotel hotel, LocalDate checkInDate, LocalDate checkOutDate) {
+
+    public LocalDate getCheckInDate() {
+        return CheckInDate;
+    }
+
+    public LocalDate getCheckOutDate() {
+        return CheckOutDate;
+    }
+
+    public boolean isCheckedIn() {
+        return CheckedIn;
+    }
+
+    public Camera getCamera() {
+        return Camera;
+    }
+
+    public String toString() {
+        return "Rezervare{" +
+                "CheckInDate=" + CheckInDate +
+                ", CheckOutDate=" + CheckOutDate +
+                ", CheckedIn=" + CheckedIn +
+                ", ServiciiCumparate=" + ServiciiCumparate +
+                ", Camera=" + Camera +
+                ", Persoana=" + Persoana +
+                ", Hotel=" + Hotel +
+                '}';
+    }
+    public Rezervare(Persoana persoana, Camera camera, Hotel hotel, LocalDate checkInDate, LocalDate checkOutDate) {
         super(persoana, hotel);
         ServiciiCumparate = new ArrayList<Serviciu>();
+        Camera = camera;
         CheckedIn = false;
         CheckInDate = checkInDate;
         CheckOutDate = checkOutDate;

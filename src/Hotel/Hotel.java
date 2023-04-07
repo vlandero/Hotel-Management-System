@@ -4,7 +4,9 @@ import Camera.Camera;
 import Serviciu.Serviciu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Hotel {
     private String Nume;
@@ -29,7 +31,23 @@ public class Hotel {
     }
 
     public void addCamera(Camera camera) {
-        Camere.add(camera);
+        int index = Collections.binarySearch(Camere, camera);
+        if (index < 0) {
+            Camere.add(-index - 1, camera);
+        }
+    }
+
+    public void removeCamera(Camera camera) {
+        Camere.remove(camera);
+    }
+
+    public Camera cautaCamera(String numar) {
+        for (Camera camera : Camere) {
+            if (Objects.equals(camera.getNumar(), numar)) {
+                return camera;
+            }
+        }
+        return null;
     }
 
     public void addServiciu(Serviciu serviciu) {
@@ -42,11 +60,21 @@ public class Hotel {
         }
     }
 
+    public String toString() {
+        return "Hotel{" +
+                "Nume='" + Nume + '\'' +
+                ", Adresa='" + Adresa + '\'' +
+                ", Camere=" + Camere +
+                ", Servicii=" + Servicii +
+                '}';
+    }
+
 
     public Hotel(String Nume, String Adresa, ArrayList<Camera> Camere, ArrayList<Serviciu> Servicii) {
         this.Nume = Nume;
         this.Adresa = Adresa;
         this.Camere = Camere;
+        Collections.sort(this.Camere);
         this.Servicii = Servicii;
     }
 }

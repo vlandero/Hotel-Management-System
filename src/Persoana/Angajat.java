@@ -2,8 +2,8 @@ package Persoana;
 
 import java.time.LocalDate;
 
-public class Angajat extends Persoana {
-    private int Salariu;
+public class Angajat extends Persoana implements Comparable<Angajat> {
+    private Integer Salariu;
     private String UnitateSalariu;
     private String Job;
     private LocalDate StartDate;
@@ -33,6 +33,14 @@ public class Angajat extends Persoana {
         return UnitateSalariu;
     }
 
+    public void setSalariu(Integer salariu) {
+        Salariu = salariu;
+    }
+
+    public void setUnitateSalariu(String unitateSalariu) {
+        UnitateSalariu = unitateSalariu;
+    }
+
 
     @Override
     public String toString() {
@@ -50,7 +58,34 @@ public class Angajat extends Persoana {
         return s;
     }
 
-    public Angajat(String nume, String prenume, String cnp, String username, int salary, String salaryUnit, String job, LocalDate startDate) {
+    @Override
+    public int compareTo(Angajat o) {
+        if(this.Salariu > o.Salariu)
+            return 1;
+        else if(this.Salariu < o.Salariu)
+            return -1;
+        else {
+            if(this.StartDate.isAfter(o.StartDate))
+                return 1;
+            else if(this.StartDate.isBefore(o.StartDate))
+                return -1;
+            else {
+                if(this.Nume.compareTo(o.Nume) > 0)
+                    return 1;
+                else if(this.Nume.compareTo(o.Nume) < 0)
+                    return -1;
+                else {
+                    if(this.Prenume.compareTo(o.Prenume) > 0)
+                        return 1;
+                    else if(this.Prenume.compareTo(o.Prenume) < 0)
+                        return -1;
+                    else return 0;
+                }
+            }
+        }
+    }
+
+    public Angajat(String nume, String prenume, String cnp, String username, Integer salary, String salaryUnit, String job, LocalDate startDate) {
         super(nume, prenume, cnp, username);
         Salariu = salary;
         UnitateSalariu = salaryUnit;
