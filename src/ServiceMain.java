@@ -213,28 +213,35 @@ public class ServiceMain {
     }
 
     public void getInfoHotel(){
+        boolean ok = false;
         String nume = getString("numele hotelului");
         for (Hotel hotel : Hotels) {
             if(hotel.getNume().equals(nume)){
                 System.out.println(hotel);
+                ok = true;
             }
         }
-        System.out.println("Nu exista hotel cu numele " + nume);
+        if(!ok)
+            System.out.println("Nu exista hotel cu numele " + nume);
     }
 
     public void getInfoPersoana(){
+        boolean ok = false;
         String username = getString("username-ul persoanei");
         for (Client client : Clienti) {
             if(client.getUsername().equals(username)){
+                ok = true;
                 System.out.println(client);
             }
         }
         for (Angajat angajat : Angajati) {
             if(angajat.getUsername().equals(username)){
+                ok = true;
                 System.out.println(angajat);
             }
         }
-        System.out.println("Nu exista persoana cu username-ul " + username);
+        if(!ok)
+            System.out.println("Nu exista persoana cu username-ul " + username);
     }
 
     public void deleteAngajat(){
@@ -392,7 +399,11 @@ public class ServiceMain {
         if(hotel != null){
             String dataInceput = getString("data de inceput a rezervarii");
             String dataSfarsit = getString("data de sfarsit a rezervarii");
+            System.out.println("Camerele libere sunt:");
             hotel.camereLibere(dataInceput, dataSfarsit);
+        }
+        else {
+            System.out.println("Nu exista hotel cu numele " + nume);
         }
     }
 

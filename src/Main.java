@@ -91,6 +91,9 @@ public class Main {
         System.out.println("18. Check-in");
         System.out.println("19. Check-out");
         System.out.println("20. Afisare camere libere");
+        System.out.println("21. Adauga camera la hotel");
+        System.out.println("22. Modificare data check-in");
+        System.out.println("23. Modificare data check-out");
 
         Scanner scanner = new Scanner(System.in);
         boolean ok = true;
@@ -117,6 +120,9 @@ public class Main {
                 case 18 -> serviceMain.checkIn();
                 case 19 -> serviceMain.checkOut();
                 case 20 -> serviceMain.afisareCamereLibereHotel();
+                case 21 -> serviceMain.addCamera();
+                case 22 -> serviceMain.modificareCheckInDate();
+                case 23 -> serviceMain.modificareCheckOutDate();
                 default -> ok = false;
             }
         }

@@ -14,8 +14,12 @@ public class Camera implements Comparable<Camera> {
         LocalDate d1 = LocalDate.parse(i1);
         LocalDate d2 = LocalDate.parse(i2);
         for (LocalDate date = d1; date.isBefore(d2); date = date.plusDays(1)) {
-            if (!disponibilitate.get(date.toString())) {
-                return false;
+            try{
+                if (!disponibilitate.get(date.toString())) {
+                    return false;
+                }
+            } catch (NullPointerException e) {
+                continue;
             }
         }
         return true;
