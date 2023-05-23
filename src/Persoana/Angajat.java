@@ -66,9 +66,9 @@ public class Angajat extends Persoana implements Comparable<Angajat> {
         else if(this.Salariu < o.Salariu)
             return -1;
         else {
-            if(this.StartDate.isAfter(o.StartDate))
+            if(this.StartDate != null && this.StartDate.isAfter(o.StartDate))
                 return 1;
-            else if(this.StartDate.isBefore(o.StartDate))
+            else if(this.StartDate != null && this.StartDate.isBefore(o.StartDate))
                 return -1;
             else {
                 if(this.Nume.compareTo(o.Nume) > 0)

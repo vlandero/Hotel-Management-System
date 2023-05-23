@@ -21,7 +21,8 @@ public class ServiceMain {
     private ArrayList<Angajat> Angajati;
     private ArrayList<Rezervare> Rezervari;
     private ArrayList<Angajare> Angajari;
-    private DatabaseQueries db;
+    private final DatabaseQueries db;
+    private final AuditService auditService = new AuditService();
 
     private String getString(String text){
         Scanner scanner = new Scanner(System.in);
@@ -146,12 +147,14 @@ public class ServiceMain {
         String prenume = getString("prenumele angajatului");
         String cnp = getString("CNP-ul angajatului");
         String username = getString("username-ul angajatului");
+        Integer salary = getInt("salariul angajatului");
+        String salaryUnit = getString("unitatea salariului");
         Angajat existent = getAngajatByUsername(username);
         if(existent != null){
             System.out.println("Usernameul exista deja!");
             return;
         }
-        Angajat ang = new Angajat(nume, prenume, cnp, username, null, null, null, null, null);
+        Angajat ang = new Angajat(nume, prenume, cnp, username, salary, salaryUnit, null, null, null);
         int st, dr, mij;
         st = 0;
         dr = Angajati.size() - 1;
@@ -205,24 +208,28 @@ public class ServiceMain {
     }
 
     public void getInfoHotels() {
+        auditService.logAction("getInfoHotels");
         for(Hotel hotel : Hotels){
             System.out.println(hotel);
         }
     }
 
     public void getInfoClienti() {
+        auditService.logAction("getInfoClienti");
         for(Client client : Clienti){
             System.out.println(client);
         }
     }
 
     public void getInfoAngajati() {
+        auditService.logAction("getInfoAngajati");
         for(Angajat angajat : Angajati){
             System.out.println(angajat);
         }
     }
 
     public void getInfoHotel(){
+        auditService.logAction("getInfoHotel");
         boolean ok = false;
         String nume = getString("numele hotelului");
         for (Hotel hotel : Hotels) {
@@ -236,6 +243,7 @@ public class ServiceMain {
     }
 
     public void getInfoPersoana(){
+        auditService.logAction("getInfoPersoana");
         boolean ok = false;
         String username = getString("username-ul persoanei");
         for (Client client : Clienti) {
@@ -255,6 +263,7 @@ public class ServiceMain {
     }
 
     public void deleteAngajat(){
+        auditService.logAction("deleteAngajat");
         String username = getString("username-ul angajatului");
         for (Angajat angajat : Angajati) {
             if(angajat.getUsername().equals(username)){
@@ -267,6 +276,7 @@ public class ServiceMain {
     }
 
     public void deleteHotel(){
+        auditService.logAction("deleteHotel");
         String nume = getString("numele hotelului");
         for (Hotel hotel : Hotels) {
             if(hotel.getNume().equals(nume)){
@@ -279,6 +289,7 @@ public class ServiceMain {
     }
 
     public void deleteClient(){
+        auditService.logAction("deleteClient");
         String username = getString("username-ul clientului");
         for (Client client : Clienti) {
             if(client.getUsername().equals(username)){
@@ -291,6 +302,7 @@ public class ServiceMain {
     }
 
     public void addCamera(){
+        auditService.logAction("addCamera");
         String nume = getString("numele hotelului");
         Hotel hotel = getHotelByName(nume);
         if(hotel != null){
@@ -313,6 +325,7 @@ public class ServiceMain {
     }
 
     public void rezervaCamera(){
+        auditService.logAction("rezervaCamera");
         String nume = getString("numele hotelului");
         Hotel hotel = getHotelByName(nume);
         if(hotel != null){
@@ -346,6 +359,7 @@ public class ServiceMain {
     }
 
     public void anuleazaRezervare(){
+        auditService.logAction("anuleazaRezervare");
         String nume = getString("numele hotelului");
         Hotel hotel = getHotelByName(nume);
         if(hotel != null){
@@ -372,6 +386,7 @@ public class ServiceMain {
     }
 
     public void checkIn(){
+        auditService.logAction("checkIn");
         Rezervare rezervare = getRezervareInput();
         if(rezervare != null){
             rezervare.checkIn();
@@ -380,6 +395,7 @@ public class ServiceMain {
     }
 
     public void checkOut(){
+        auditService.logAction("checkOut");
         Rezervare rezervare = getRezervareInput();
         if(rezervare != null){
             rezervare.checkOut();
@@ -388,6 +404,7 @@ public class ServiceMain {
     }
 
     public void modificareCheckInDate(){
+        auditService.logAction("modificareCheckInDate");
         Rezervare rezervare = getRezervareInput();
         if(rezervare != null){
             String data = getString("data noua de check-in");
@@ -397,6 +414,7 @@ public class ServiceMain {
     }
 
     public void modificareCheckOutDate(){
+        auditService.logAction("modificareCheckOutDate");
         Rezervare rezervare = getRezervareInput();
         if(rezervare != null){
             String data = getString("data noua de check-out");
@@ -406,6 +424,7 @@ public class ServiceMain {
     }
 
     public void getServiciiHotel(){
+        auditService.logAction("getServiciiHotel");
         String nume = getString("numele hotelului");
         Hotel hotel = getHotelByName(nume);
         if(hotel != null){
@@ -417,6 +436,7 @@ public class ServiceMain {
     }
 
     public void afisareCamereLibereHotel(){
+        auditService.logAction("afisareCamereLibereHotel");
         String nume = getString("numele hotelului");
         Hotel hotel = getHotelByName(nume);
         if(hotel != null){

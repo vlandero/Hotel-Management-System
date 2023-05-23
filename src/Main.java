@@ -21,26 +21,6 @@ public class Main {
         ArrayList<Rezervare> rezervari = db.getAllRezervari(clienti, hoteluri);
         ArrayList<Angajare> angajari = db.getAllAngajari(angajati, hoteluri);
 
-        Camera camera6 = new Camera("6", 2, 1, "", 150, null);
-        Camera camera7 = new Camera("7", 2, 2, "", 200, null);
-        Camera camera8 = new Camera("8", 2, 2, "", 200, null);
-        Camera camera9 = new Camera("9", 2, 2, "", 200, null);
-        Camera camera10 = new Camera("10", 3, 2, "", 250, null);
-        Camera camera11 = new Camera("11", 3, 2, "", 250, null);
-        Camera camera12 = new Camera("12", 3, 2, "", 250, null);
-        Camera camera13 = new Camera("13", 3, 3, "", 300, null);
-        Camera camera14 = new Camera("14", 3, 3, "", 300, null);
-        Camera camera15 = new Camera("15", 3, 3, "", 300, null);
-        Camera camera16 = new Camera("16", 4, 3, "", 350, null);
-        Camera camera17 = new Camera("17", 4, 3, "", 350, null);
-        Camera camera18 = new Camera("18", 4, 3, "", 350, null);
-        Camera camera19 = new Camera("19", 4, 4, "", 400, null);
-        Camera camera20 = new Camera("20", 4, 4, "", 400, null);
-        Camera camera21 = new Camera("21", 4, 4, "", 400, null);
-        Camera camera22 = new Camera("22", 5, 4, "", 450, null);
-        Camera camera24 = new Camera("24", 5, 4, "", 450, null);
-        Camera camera25 = new Camera("25", 5, 5, "", 500, null);
-
         ServiceMain serviceMain = new ServiceMain(hoteluri, clienti, angajati, rezervari, angajari, db);
 
         System.out.println("Selectati numarul din lista urmatoare pentru a realiza interogarea dorita:");

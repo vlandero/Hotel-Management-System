@@ -246,9 +246,7 @@ public class DatabaseQueries {
                 int salariu = rs.getInt("Salariu");
                 String unitateSalariu = rs.getString("UnitateSalariu");
                 String job = rs.getString("Job");
-                LocalDate startDate = rs.getDate("StartDate").toLocalDate();
-                LocalDate endDate = rs.getDate("EndDate").toLocalDate();
-                angajati.add(new Angajat(nume, prenume, CNP,username, salariu, unitateSalariu, job, startDate, endDate));
+                angajati.add(new Angajat(nume, prenume, CNP,username, salariu, unitateSalariu, job, null, null));
             }
             rs.close();
             st.close();
@@ -264,7 +262,7 @@ public class DatabaseQueries {
     public void addAngajat(Angajat angajat){
         try {
             Connection con = createConnection();
-            PreparedStatement st = con.prepareStatement("INSERT INTO angajat VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement st = con.prepareStatement("INSERT INTO angajat VALUES (?, ?, ?, ?, ?, ?, ?)");
             st.setString(1, angajat.getUsername());
             st.setString(2, angajat.getNume());
             st.setString(3, angajat.getPrenume());
@@ -272,8 +270,6 @@ public class DatabaseQueries {
             st.setInt(5, angajat.getSalariu());
             st.setString(6, angajat.getUnitateSalariu());
             st.setString(7, angajat.getJob());
-            st.setDate(8, Date.valueOf(angajat.getStartDate()));
-            st.setDate(9, Date.valueOf(angajat.getEndDate()));
             st.executeUpdate();
             st.close();
             con.close();
