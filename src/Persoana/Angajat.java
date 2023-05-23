@@ -48,11 +48,12 @@ public class Angajat extends Persoana implements Comparable<Angajat> {
                 "Salary=" + Salariu +
                 ", SalaryUnit='" + UnitateSalariu + '\'' +
                 ", Job='" + Job + '\'' +
-                ", StartDate=" + StartDate +
                 ", Nume='" + Nume + '\'' +
                 ", Prenume='" + Prenume + '\'' +
                 ", CNP='" + CNP + '\'' +
                 '}';
+        if(StartDate != null)
+            s += ", StartDate=" + StartDate;
         if(EndDate != null)
             s += ", EndDate=" + EndDate;
         return s;
@@ -85,12 +86,12 @@ public class Angajat extends Persoana implements Comparable<Angajat> {
         }
     }
 
-    public Angajat(String nume, String prenume, String cnp, String username, Integer salary, String salaryUnit, String job, LocalDate startDate) {
+    public Angajat(String nume, String prenume, String cnp, String username, Integer salary, String salaryUnit, String job, LocalDate startDate, LocalDate endDate) {
         super(nume, prenume, cnp, username);
         Salariu = salary;
         UnitateSalariu = salaryUnit;
         Job = job;
         StartDate = startDate;
-        EndDate = null;
+        EndDate = endDate;
     }
 }

@@ -6,10 +6,12 @@ import Persoana.Angajat;
 import Persoana.Client;
 import Serviciu.Serviciu;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class ServiceMain {
@@ -19,6 +21,7 @@ public class ServiceMain {
     private ArrayList<Angajat> Angajati;
     private ArrayList<Rezervare> Rezervari;
     private ArrayList<Angajare> Angajari;
+    private DatabaseQueries db;
 
     private String getString(String text){
         Scanner scanner = new Scanner(System.in);
@@ -41,18 +44,18 @@ public class ServiceMain {
         return null;
     }
 
-    private Client getClientByName(String nume){
+    private Client getClientByUsername(String username){
         for (Client client : Clienti) {
-            if (client.getNume().equals(nume)) {
+            if (client.getUsername().equals(username)) {
                 return client;
             }
         }
         return null;
     }
 
-    private Angajat getAngajatByName(String nume){
+    private Angajat getAngajatByUsername(String nume){
         for (Angajat angajat : Angajati) {
-            if (angajat.getNume().equals(nume)) {
+            if (angajat.getUsername().equals(nume)) {
                 return angajat;
             }
         }
@@ -80,7 +83,7 @@ public class ServiceMain {
 
     public void getRezervariClient(){
         String username = getString("username-ul clientului");
-        Client client = getClientByName(username);
+        Client client = getClientByUsername(username);
         if(client != null){
             for (Rezervare rezervare : Rezervari) {
                 if(rezervare.getPersoana().getUsername().equals(username)){
@@ -92,7 +95,7 @@ public class ServiceMain {
 
     public Rezervare getRezervareInput(){
         String nume = getString("numele clientului");
-        Client client = getClientByName(nume);
+        Client client = getClientByUsername(nume);
         String numeHotel = getString("numele hotelului");
         Hotel hotel = getHotelByName(numeHotel);
         if(client != null && hotel != null){
@@ -117,7 +120,9 @@ public class ServiceMain {
             System.out.println("Hotelul exista deja!");
             return;
         }
-        Hotels.add(new Hotel(nume, adresa, new ArrayList<Camera>(), new ArrayList<Serviciu>()));
+        Hotel hotel = new Hotel(nume, adresa, new HashSet<Camera>(), new ArrayList<Serviciu>());
+        Hotels.add(hotel);
+        db.addHotel(hotel);
     }
 
     public void addClient(){
@@ -126,12 +131,14 @@ public class ServiceMain {
         String cnp = getString("CNP-ul clientului");
         String telefon = getString("numarul de telefon al clientului");
         String username = getString("username-ul clientului");
-        Client existent = getClientByName(username);
+        Client existent = getClientByUsername(username);
         if(existent != null){
             System.out.println("Usernameul exista deja!");
             return;
         }
-        Clienti.add(new Client(nume, prenume, cnp, telefon, username));
+        Client client = new Client(nume, prenume, cnp, telefon, username);
+        Clienti.add(client);
+        db.addClient(client);
     }
 
     public void addAngajat(){
@@ -139,13 +146,12 @@ public class ServiceMain {
         String prenume = getString("prenumele angajatului");
         String cnp = getString("CNP-ul angajatului");
         String username = getString("username-ul angajatului");
-        Angajat existent = getAngajatByName(username);
+        Angajat existent = getAngajatByUsername(username);
         if(existent != null){
             System.out.println("Usernameul exista deja!");
             return;
         }
-        Angajat ang = new Angajat(nume, prenume, cnp, username, null, null, null, null);
-        Angajati.add(ang);
+        Angajat ang = new Angajat(nume, prenume, cnp, username, null, null, null, null, null);
         int st, dr, mij;
         st = 0;
         dr = Angajati.size() - 1;
@@ -157,12 +163,14 @@ public class ServiceMain {
                 dr = mij - 1;
             }
         }
-        Angajati.add(st, new Angajat(nume, prenume, cnp, username, null, null, null, null));
+        Angajati.add(st, ang);
+        db.addAngajat(ang);
+
     }
 
     public void angajeazaLaHotel(){
         String username = getString("username-ul angajatului");
-        Angajat angajat = getAngajatByName(username);
+        Angajat angajat = getAngajatByUsername(username);
         String nume = getString("numele hotelului");
         Hotel hotel = getHotelByName(nume);
         if(angajat != null && hotel != null){
@@ -172,6 +180,7 @@ public class ServiceMain {
             angajat.setUnitateSalariu(unitate);
             LocalDate dataAngajare = LocalDate.now();
             Angajari.add(new Angajare(angajat, hotel, dataAngajare));
+            db.angajeazaLaHotel(angajat, hotel, dataAngajare);
             System.out.println("Angajatul a fost angajat cu succes!");
             return;
         }
@@ -180,13 +189,14 @@ public class ServiceMain {
 
     public void demisioneazaDeLaHotel(){
         String username = getString("username-ul angajatului");
-        Angajat angajat = getAngajatByName(username);
+        Angajat angajat = getAngajatByUsername(username);
         String nume = getString("numele hotelului");
         Hotel hotel = getHotelByName(nume);
         if(angajat != null && hotel != null){
             Angajare angajare = getAngajare(username, nume);
             if(angajare != null){
                 Angajari.remove(angajare);
+                db.demisioneazaDeLaHotel(angajat, hotel);
                 System.out.println("Angajatul a fost demis cu succes!");
                 return;
             }
@@ -249,6 +259,7 @@ public class ServiceMain {
         for (Angajat angajat : Angajati) {
             if(angajat.getUsername().equals(username)){
                 Angajati.remove(angajat);
+                db.deleteAngajat(angajat);
                 return;
             }
         }
@@ -260,6 +271,7 @@ public class ServiceMain {
         for (Hotel hotel : Hotels) {
             if(hotel.getNume().equals(nume)){
                 Hotels.remove(hotel);
+                db.deleteHotel(hotel);
                 return;
             }
         }
@@ -271,6 +283,7 @@ public class ServiceMain {
         for (Client client : Clienti) {
             if(client.getUsername().equals(username)){
                 Clienti.remove(client);
+                db.deleteClient(client);
                 return;
             }
         }
@@ -290,7 +303,9 @@ public class ServiceMain {
             int nrLocuri = getInt("numarul de locuri din camera");
             int pret = getInt("pretul camerei");
             String descriere = getString("descrierea camerei");
-            hotel.addCamera(new Camera(numar, etaj, nrLocuri, descriere, pret));
+            Camera camera = new Camera(numar, etaj, nrLocuri, descriere, pret, null);
+            hotel.addCamera(camera);
+            db.addCamera(camera, hotel);
             System.out.println("Camera a fost adaugata cu succes!");
             return;
         }
@@ -314,12 +329,14 @@ public class ServiceMain {
                     return;
                 }
                 String username = getString("username-ul clientului");
-                Client client = getClientByName(username);
+                Client client = getClientByUsername(username);
                 if(client != null){
                     DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-                    Rezervare rezervare = new Rezervare(client, camera, hotel, LocalDate.parse(dataInceput, formatter), LocalDate.parse(dataSfarsit, formatter));
+                    Rezervare rezervare = new Rezervare(client, camera, hotel, LocalDate.parse(dataInceput, formatter), LocalDate.parse(dataSfarsit, formatter), false);
                     camera.setDisponibilitateFalse(dataInceput, dataSfarsit);
+                    db.setDisponibilitate(camera.getNumar(), hotel.getNume(), dataInceput, dataSfarsit, false);
                     Rezervari.add(rezervare);
+                    db.addRezervare(rezervare);
                     System.out.println("Camera a fost rezervata cu succes!");
                     return;
                 }
@@ -336,13 +353,15 @@ public class ServiceMain {
             Camera camera = hotel.cautaCamera(numar);
             if(camera != null){
                 String username = getString("username-ul clientului");
-                Client client = getClientByName(username);
+                Client client = getClientByUsername(username);
                 if(client != null){
                     Rezervare rezervare = getRezervare(username, nume, numar);
                     if(rezervare != null){
                         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
                         camera.setDisponibilitateTrue(rezervare.getCheckInDate().format(formatter), rezervare.getCheckOutDate().format(formatter));
+                        db.setDisponibilitate(camera.getNumar(), hotel.getNume(), rezervare.getCheckInDate().format(formatter), rezervare.getCheckOutDate().format(formatter), true);
                         Rezervari.remove(rezervare);
+                        db.removeRezervare(rezervare);
                         System.out.println("Rezervarea a fost anulata cu succes!");
                         return;
                     }
@@ -356,6 +375,7 @@ public class ServiceMain {
         Rezervare rezervare = getRezervareInput();
         if(rezervare != null){
             rezervare.checkIn();
+            db.checkIn(rezervare);
         }
     }
 
@@ -363,6 +383,7 @@ public class ServiceMain {
         Rezervare rezervare = getRezervareInput();
         if(rezervare != null){
             rezervare.checkOut();
+            db.checkOut(rezervare);
         }
     }
 
@@ -371,6 +392,7 @@ public class ServiceMain {
         if(rezervare != null){
             String data = getString("data noua de check-in");
             rezervare.modificareCheckInDate(LocalDate.parse(data));
+            db.changeCheckInDate(rezervare, LocalDate.parse(data));
         }
     }
 
@@ -379,6 +401,7 @@ public class ServiceMain {
         if(rezervare != null){
             String data = getString("data noua de check-out");
             rezervare.modificareCheckOutDate(LocalDate.parse(data));
+            db.changeCheckOutDate(rezervare, LocalDate.parse(data));
         }
     }
 
@@ -407,10 +430,13 @@ public class ServiceMain {
         }
     }
 
-    public ServiceMain(ArrayList<Hotel> hotels, ArrayList<Client> clienti, ArrayList<Angajat> angajati) {
+    public ServiceMain(ArrayList<Hotel> hotels, ArrayList<Client> clienti, ArrayList<Angajat> angajati, ArrayList<Rezervare> rezervari, ArrayList<Angajare> angajari, DatabaseQueries DB) {
         Hotels = hotels;
         Clienti = clienti;
         Angajati = angajati;
         Collections.sort(Angajati);
+        Rezervari = rezervari;
+        Angajari = angajari;
+        db = DB;
     }
 }

@@ -1,74 +1,47 @@
 import Camera.Camera;
 import Hotel.Hotel;
+import ManyToMany.Angajare;
+import ManyToMany.Rezervare;
 import Persoana.Persoana;
 import Serviciu.Serviciu;
 import Persoana.Client;
 import Persoana.Angajat;
 import Serviciu.Masaj;
 
-import java.util.ArrayList;
+import javax.xml.crypto.Data;
+import java.util.*;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Angajat> angajati = new ArrayList<Angajat>();
-        ArrayList<Client> clienti = new ArrayList<Client>();
-        ArrayList<Hotel> hoteluri = new ArrayList<Hotel>();
+        DatabaseQueries db = DatabaseQueries.getInstance();
+        ArrayList<Angajat> angajati = db.getAllAngajati();
+        ArrayList<Client> clienti = db.getAllClienti();
+        ArrayList<Hotel> hoteluri = db.getAllHotels();
+        ArrayList<Rezervare> rezervari = db.getAllRezervari(clienti, hoteluri);
+        ArrayList<Angajare> angajari = db.getAllAngajari(angajati, hoteluri);
 
-        clienti.add(new Client("Ionescu", "Maria", "1234567890123", "0722222222", "mariaionescu"));
-        clienti.add (new Client("Popescu", "Ion", "2345678901234", "0733333333", "ionpopescu"));
-        clienti.add (new Client("Georgescu", "Andrei", "3456789012345", "0744444444", "andrei_georgescu"));
-        clienti.add (new Client("Dumitru", "Ana", "4567890123456", "0755555555", "anadumitru"));
-        clienti.add (new Client("Popa", "George", "5678901234567", "0766666666", "george_popa"));
-        clienti.add (new Client("Andrei", "Alexandra", "6789012345678", "0777777777", "alexandraandrei"));
-        clienti.add (new Client("Radu", "Mihai", "7890123456789", "0788888888", "mihairadu"));
-        clienti.add (new Client("Stefan", "Andreea", "8901234567890", "0799999999", "andreeastefan"));
-        clienti.add (new Client("Gheorghe", "Cristian", "9012345678901", "0800000000", "cristiangheorghe"));
-        clienti.add (new Client("Munteanu", "Maria", "0123456789012", "0811111111", "mariamunteanu"));
-        clienti.add (new Client("Alexandrescu", "Dragos", "1234567890123", "0822222222", "dragos_alexandrescu"));
-        clienti.add (new Client("Constantinescu", "Andrei", "2345678901234", "0833333333", "andrei_constantinescu"));
-        clienti.add (new Client("Petrescu", "Ioana", "3456789012345", "0844444444", "ioanapetrescu"));
-        Camera camera1 = new Camera("1", 1, 1, "", 100);
-        Camera camera2 = new Camera("2", 1, 1, "", 100);
-        Camera camera3 = new Camera("3", 1, 1, "", 100);
-        Camera camera4 = new Camera("4", 2, 1, "", 150);
-        Camera camera5 = new Camera("5", 2, 1, "", 150);
-        Camera camera6 = new Camera("6", 2, 1, "", 150);
-        Camera camera7 = new Camera("7", 2, 2, "", 200);
-        Camera camera8 = new Camera("8", 2, 2, "", 200);
-        Camera camera9 = new Camera("9", 2, 2, "", 200);
-        Camera camera10 = new Camera("10", 3, 2, "", 250);
-        Camera camera11 = new Camera("11", 3, 2, "", 250);
-        Camera camera12 = new Camera("12", 3, 2, "", 250);
-        Camera camera13 = new Camera("13", 3, 3, "", 300);
-        Camera camera14 = new Camera("14", 3, 3, "", 300);
-        Camera camera15 = new Camera("15", 3, 3, "", 300);
-        Camera camera16 = new Camera("16", 4, 3, "", 350);
-        Camera camera17 = new Camera("17", 4, 3, "", 350);
-        Camera camera18 = new Camera("18", 4, 3, "", 350);
-        Camera camera19 = new Camera("19", 4, 4, "", 400);
-        Camera camera20 = new Camera("20", 4, 4, "", 400);
-        Camera camera21 = new Camera("21", 4, 4, "", 400);
-        Camera camera22 = new Camera("22", 5, 4, "", 450);
-        Camera camera23 = new Camera("23", 5, 4, "", 450);
-        Camera camera24 = new Camera("24", 5, 4, "", 450);
-        Camera camera25 = new Camera("25", 5, 5, "", 500);
-        ArrayList<Camera> camere1 = new ArrayList<Camera>();
+        Camera camera6 = new Camera("6", 2, 1, "", 150, null);
+        Camera camera7 = new Camera("7", 2, 2, "", 200, null);
+        Camera camera8 = new Camera("8", 2, 2, "", 200, null);
+        Camera camera9 = new Camera("9", 2, 2, "", 200, null);
+        Camera camera10 = new Camera("10", 3, 2, "", 250, null);
+        Camera camera11 = new Camera("11", 3, 2, "", 250, null);
+        Camera camera12 = new Camera("12", 3, 2, "", 250, null);
+        Camera camera13 = new Camera("13", 3, 3, "", 300, null);
+        Camera camera14 = new Camera("14", 3, 3, "", 300, null);
+        Camera camera15 = new Camera("15", 3, 3, "", 300, null);
+        Camera camera16 = new Camera("16", 4, 3, "", 350, null);
+        Camera camera17 = new Camera("17", 4, 3, "", 350, null);
+        Camera camera18 = new Camera("18", 4, 3, "", 350, null);
+        Camera camera19 = new Camera("19", 4, 4, "", 400, null);
+        Camera camera20 = new Camera("20", 4, 4, "", 400, null);
+        Camera camera21 = new Camera("21", 4, 4, "", 400, null);
+        Camera camera22 = new Camera("22", 5, 4, "", 450, null);
+        Camera camera24 = new Camera("24", 5, 4, "", 450, null);
+        Camera camera25 = new Camera("25", 5, 5, "", 500, null);
 
-        Serviciu serviciu1 = new Masaj("Masaj Thailandez", "Masaj Thailandez misto", 100, "O ora", "Relaxare");
-        Hotel hotel1 = new Hotel("Royals", "Bucuresti",new ArrayList<Camera>(), new ArrayList<Serviciu>());
-        hotel1.addCamera(camera1);
-        hotel1.addCamera(camera2);
-        hotel1.addCamera(camera3);
-        hotel1.addCamera(camera4);
-        hotel1.addCamera(camera5);
-        hotel1.addCamera(camera23);
-        hoteluri.add(hotel1);
-        hotel1.addServiciu(serviciu1);
-
-        ServiceMain serviceMain = new ServiceMain(hoteluri, clienti, angajati);
+        ServiceMain serviceMain = new ServiceMain(hoteluri, clienti, angajati, rezervari, angajari, db);
 
         System.out.println("Selectati numarul din lista urmatoare pentru a realiza interogarea dorita:");
         System.out.println("1. Afisare hoteluri");
@@ -126,6 +99,5 @@ public class Main {
                 default -> ok = false;
             }
         }
-
     }
 }

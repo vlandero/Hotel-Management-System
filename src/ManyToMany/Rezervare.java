@@ -54,7 +54,6 @@ public class Rezervare extends ManyToMany{
         if(Camera.eDisponibil(checkInDate.toString(), CheckOutDate.toString())){
             CheckInDate = checkInDate;
             System.out.println("Data de checkIn a fost modificata");
-            return;
         }
     }
 
@@ -102,11 +101,11 @@ public class Rezervare extends ManyToMany{
                 ", Hotel=" + Hotel +
                 '}';
     }
-    public Rezervare(Persoana persoana, Camera camera, Hotel hotel, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Rezervare(Persoana persoana, Camera camera, Hotel hotel, LocalDate checkInDate, LocalDate checkOutDate, Boolean checkedIn) {
         super(persoana, hotel);
         ServiciiCumparate = new ArrayList<Serviciu>();
         Camera = camera;
-        CheckedIn = false;
+        CheckedIn = checkedIn;
         CheckInDate = checkInDate;
         CheckOutDate = checkOutDate;
         modificareCheckInDate(checkInDate);

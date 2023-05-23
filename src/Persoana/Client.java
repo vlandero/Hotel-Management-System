@@ -10,6 +10,7 @@ public class Client extends Persoana{
     @Override
     public String toString() {
         return "Client {" +
+                "Username='" + Username + '\'' +
                 ", Telefon='" + Telefon + '\'' +
                 ", Nume='" + Nume + '\'' +
                 ", Prenume='" + Prenume + '\'' +

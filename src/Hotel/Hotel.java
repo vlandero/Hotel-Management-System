@@ -3,15 +3,12 @@ package Hotel;
 import Camera.Camera;
 import Serviciu.Serviciu;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Hotel {
     private String Nume;
     private String Adresa;
-    private ArrayList<Camera> Camere;
+    private Set<Camera> Camere;
     private ArrayList<Serviciu> Servicii;
 
     public ArrayList<Serviciu> getServicii() {
@@ -20,6 +17,9 @@ public class Hotel {
 
     public String getNume() {
         return Nume;
+    }
+    public String getAdresa() {
+        return Adresa;
     }
 
     public void camereLibere(String d1, String d2) {
@@ -30,11 +30,12 @@ public class Hotel {
         }
     }
 
+    public Set<Camera> getCamere() {
+        return Camere;
+    }
+
     public void addCamera(Camera camera) {
-        int index = Collections.binarySearch(Camere, camera);
-        if (index < 0) {
-            Camere.add(-index - 1, camera);
-        }
+        Camere.add(camera);
     }
 
     public void removeCamera(Camera camera) {
@@ -70,11 +71,10 @@ public class Hotel {
     }
 
 
-    public Hotel(String Nume, String Adresa, ArrayList<Camera> Camere, ArrayList<Serviciu> Servicii) {
+    public Hotel(String Nume, String Adresa, Set<Camera> Camere, ArrayList<Serviciu> Servicii) {
         this.Nume = Nume;
         this.Adresa = Adresa;
         this.Camere = Camere;
-        Collections.sort(this.Camere);
         this.Servicii = Servicii;
     }
 }

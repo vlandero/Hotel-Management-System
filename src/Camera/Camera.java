@@ -3,13 +3,17 @@ package Camera;
 import java.time.LocalDate;
 import java.util.*;
 
-public class Camera implements Comparable<Camera> {
+public class Camera {
     private String Numar;
     private int Etaj;
     private int PretNoapte;
     private int NumarLocuri;
     private String DescriereExtra;
+
     Map<String, Boolean> disponibilitate; // stringurile sunt de tipul "yyyy-mm-dd"
+    public String getDescriereExtra() {
+        return DescriereExtra;
+    }
     public boolean eDisponibil(String i1, String i2) {
         LocalDate d1 = LocalDate.parse(i1);
         LocalDate d2 = LocalDate.parse(i2);
@@ -78,16 +82,11 @@ public class Camera implements Comparable<Camera> {
                 '}';
     }
 
-    public int compareTo(Camera o) {
-        return this.Numar.compareTo(o.Numar);
-    }
-
-    public Camera(String numar, int etaj, int numarLocuri, String descriereExtra, int pretNoapte) {
+    public Camera(String numar, int etaj, int numarLocuri, String descriereExtra, int pretNoapte, Map<String, Boolean> d) {
         this.Numar = numar;
         this.Etaj = etaj;
         this.NumarLocuri = numarLocuri;
-        this.disponibilitate = Collections.emptyMap();
         this.PretNoapte = pretNoapte;
         this.DescriereExtra = descriereExtra;
-    }
+        this.disponibilitate = (d != null) ? d : Collections.emptyMap();    }
 }
